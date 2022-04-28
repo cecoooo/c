@@ -10,6 +10,44 @@ typedef struct Actors{
     int num_oscars;
 }actor;
 
+void add(actor*, int*);
+void bigger_profit(actor*, int, int);
+void write_to_file(actor*, FILE*, int);
+void read_from_file(FILE*);
+
+int main() {
+    actor *actp;
+    int count=0, n=0, pr=0;
+    actp = (actor*) calloc(2,sizeof(actor));
+    if(actp == NULL) exit(1);
+    printf("Enter how many actors you will add:");
+    scanf("%d", &n);
+    actp = (actor*) realloc(actp, n*sizeof(actor));
+    for (int i = 0; i < n; ++i) add(actp, &count);
+    printf("Enter profit:");
+    scanf(" %d", &pr);
+    printf("\n---------------\n");
+    printf("Actors with bigger annual profit than %d:\n", pr);
+    bigger_profit(actp, pr, count);
+    printf("---------------\n");
+    FILE *file;
+    file = fopen("C:\\Users\\User\\Desktop\\c c++\\actors.txt", "w");
+    if(file == NULL){
+        perror(NULL);
+        exit(errno);
+    }
+    write_to_file(actp, file, count);
+    fclose(file);
+    file = fopen("C:\\Users\\User\\Desktop\\c c++\\actors.txt", "r");
+    if(file == NULL){
+        perror(NULL);
+        exit(errno);
+    }
+    read_from_file(file);
+    fclose(file);
+    free(actp);
+}
+
 void add(actor *actp, int* count){
     actor act;
     printf("Enter name:");
@@ -66,37 +104,4 @@ void read_from_file(FILE *file){
         ch = fgetc(file);
         printf("%c", ch);
     } while (ch != EOF);
-}
-
-int main() {
-    actor *actp;
-    int count=0, n=0, pr=0;
-    actp = (actor*) calloc(2,sizeof(actor));
-    if(actp == NULL) exit(1);
-    printf("Enter how many actors you will add:");
-    scanf("%d", &n);
-    actp = (actor*) realloc(actp, n*sizeof(actor));
-    for (int i = 0; i < n; ++i) add(actp, &count);
-    printf("Enter profit:");
-    scanf(" %d", &pr);
-    printf("\n---------------\n");
-    printf("Actors with bigger annual profit than %d:\n", pr);
-    bigger_profit(actp, pr, count);
-    printf("---------------\n");
-    FILE *file;
-    file = fopen("C:\\Users\\User\\Desktop\\c c++\\actors.txt", "w");
-    if(file == NULL){
-        perror(NULL);
-        exit(errno);
-    }
-    write_to_file(actp, file, count);
-    fclose(file);
-    file = fopen("C:\\Users\\User\\Desktop\\c c++\\actors.txt", "r");
-    if(file == NULL){
-        perror(NULL);
-        exit(errno);
-    }
-    read_from_file(file);
-    fclose(file);
-    free(actp);
 }
